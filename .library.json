@@ -1,0 +1,37 @@
+{
+    "id": 65534,
+    "name": "JATBot",
+    "version": "0.1.0",
+    "platforms": [
+        "espressif8266"
+    ],
+    "frameworks": [
+        "arduino"
+    ],
+    "homepage": "",
+    "description": "Just Another Telegram Bot",
+    "repository": {
+        "url": "https://github.com/ytrikoz/JATBot",
+        "type": "git"
+    },
+    "export": {
+        "exclude": [
+            "extras",
+            "docs",
+            "tests",
+            "test",
+            "*.doxyfile",
+            "*.pdf"
+        ],
+        "include": null
+    },
+    "authors": [
+        {
+            "maintainer": true,
+            "name": "Yuriy Trikoz",
+            "url": "https://github.com/ytrikoz/JATBot",
+            "email": "ytrikoz@gmail.com"
+        }
+    ],
+    "keywords": []
+}

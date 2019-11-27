@@ -1,0 +1,10 @@
+.pio
+.pioenvs
+.piolibdeps
+.vscode
+lib
+tools
+JATBot.code-workspace
+src/main.h
+test/
+
