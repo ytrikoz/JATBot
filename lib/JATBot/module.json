@@ -1,0 +1,19 @@
+{
+    "name": "JATBot",
+    "version": "0.4.0",
+    "description": "",
+    "keywords": [
+        "JATBot"
+    ],
+    "author": "",
+    "homepage": "https://github.com/ytrikoz/JATBot",
+    "repository": {
+        "url": "git@github.com:ytrikoz/JATBot.git",
+        "type": "git"
+    },
+    "license": "Apache-2.0",
+    "dependencies": {
+        "ArduinoJson": "^1.2.3"
+    },
+    "bin": "."
+}

@@ -11,12 +11,12 @@
 #define LIGHT_ON_CALLBACK "lightON"
 #define LIGHT_OFF_CALLBACK "lightOFF"
 
-bool wifiConnect(uint8_t mode, const char *ssid, const char *password);
+bool wifiConnect(const char *ssid, const char *password);
 
 char *getLocationStr(char *buf, const TLocation &item);
 char *getContactStr(char *buf, const TContact &item);
 
-char* getSketchSize(char *buf);
+char *getSketchSize(char *buf);
 
 void handleText(const TMessage &msg);
 void handleOther(const TMessage &msg);
@@ -26,7 +26,7 @@ void fillReplyKeyboard(JATBotReplyKeyboard *kb);
 void fillInlineKeyboard(JATBotInlineKeyboard *kb);
 
 class HeapInfo {
-  public:
+   public:
     HeapInfo() { set(); }
 
     void set() { ESP.getHeapStats(&start_free_, nullptr, &start_frag_); }
@@ -57,7 +57,7 @@ class HeapInfo {
         p.println(getInfo(buf));
     }
 
-  private:
+   private:
     uint32_t start_free_, free_;
     uint8_t start_frag_, frag_;
 };
@@ -78,7 +78,7 @@ void setup() {
     digitalWrite(WIFI_LED_PIN, HIGH);
     digitalWrite(POWER_LED_PIN, HIGH);
 
-    if (!wifiConnect(WIFI_MODE, WIFI_SSID, WIFI_PASS)) {
+    if (!wifiConnect(WIFI_SSID, WIFI_PASS)) {
         out->println(F("Unable connect to network! Exit."));
         return;
     }
@@ -105,24 +105,24 @@ void loop() {
     if (bot->getUpdates(msg)) {
         heap.printDiff(*out);
         switch (msg.type) {
-        case MESSAGE_TEXT:
-            if (msg.hasContact) {
-                char buf[128];
-                getContactStr(buf, msg.contact);
-                bot->sendMessage(msg.from.id, buf);
-            } else if (msg.hasLocation) {
-                char buf[64];
-                getLocationStr(buf, msg.location);
-                bot->sendMessage(msg.from.id, buf);
-            } else {
-                handleText(msg);
-            }
-            break;
-        case MESSAGE_QUERY:
-            handleQuery(msg);
-            break;
-        default:
-            break;
+            case MESSAGE_TEXT:
+                if (msg.hasContact) {
+                    char buf[128];
+                    getContactStr(buf, msg.contact);
+                    bot->sendMessage(msg.from.id, buf);
+                } else if (msg.hasLocation) {
+                    char buf[64];
+                    getLocationStr(buf, msg.location);
+                    bot->sendMessage(msg.from.id, buf);
+                } else {
+                    handleText(msg);
+                }
+                break;
+            case MESSAGE_QUERY:
+                handleQuery(msg);
+                break;
+            default:
+                break;
         }
     }
 }
@@ -181,13 +181,12 @@ char *getVersionStr(char *buf) {
     return buf;
 }
 
-char* getSketchSize(char *buf) {
-    return strcpy_P(buf, PSTR("RAM: 36.1% (29572)\nROM: 39.3% (410608)"));
+char *getSketchSize(char *buf) {
+    return strcpy_P(buf, PSTR("RAM: 34.7% (28388)\nROM: 39.9% (416692)"));
 }
 
-
 void handleText(const TMessage &msg) {
-    char buf[128];  
+    char buf[128];
     if (msg == "Version") {
         /*
          * VERSION
@@ -225,26 +224,25 @@ void handleText(const TMessage &msg) {
         /*
          * LIGHT ON
          */
-        strcpy_P(buf,  PSTR("Light is On"));
+        strcpy_P(buf, PSTR("Light is On"));
         digitalWrite(WIFI_LED_PIN, LOW);
     } else if (msg == "light off") {
         /*
          * LIGHT OFF
          */
-        strcpy_P(buf,  PSTR("Light is Off"));
+        strcpy_P(buf, PSTR("Light is Off"));
         digitalWrite(WIFI_LED_PIN, HIGH);
     } else if (msg == "Uptime") {
         /*
          * UPTIME
          */
-         sprintf_P(buf,  "Uptime %lu sec",  millis() / 1000);
+        sprintf_P(buf, "Uptime %lu sec", millis() / 1000);
     } else {
         /*
          * Welcome
          */
         sprintf_P(buf, PSTR("Привет, %s!\nПопробуй еще этих французких булок или напиши 'show' или 'inline'."),
                   msg.from.username.c_str());
-        return;
     }
 
     bot->sendMessage(msg.from.id, buf);
@@ -254,18 +252,9 @@ void handleOther(const TMessage &msg) {
     bot->sendMessage(msg.from.id, "Unsuported message");
 }
 
-bool wifiConnect(uint8_t mode, const char *ssid, const char *password) {
-    switch (mode) {
-    case NETWORK_STA:
-        WiFi.mode(WIFI_STA);
-        break;
-    case NETWORK_AP_STA:
-        WiFi.mode(WIFI_AP_STA);
-        break;
-    default:
-        return false;
-        break;
-    }
+bool wifiConnect(const char *ssid, const char *password) {
+    WiFi.mode(WIFI_STA);
+
     delay(100);
 
     WiFi.begin(ssid, password);

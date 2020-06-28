@@ -11,8 +11,7 @@ class JATBotHttpClient {
 
     virtual void setReuseConnection(bool reuse) = 0;
 
-    virtual void begin(const char *host, const char *path,
-                       const char fingerprint[20]) = 0;
+    virtual void begin(const char *host, const char *path) = 0;
 
     virtual int sendRequest(const char *method, const char *data) = 0;
 
